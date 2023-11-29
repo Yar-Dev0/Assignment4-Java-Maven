@@ -25,6 +25,6 @@ jobs:
     - name: Deploy to Docker Hub
       if: success()
       run: |
-        echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ ahmedyaar }} --password-stdin
+        echo ${{ dckr_pat_Rvm0_3H37J0lqswNJ8I7PH20iUo }} | docker login -u ${{ ahmedyaar }} --password-stdin
         docker build -t your-dockerhub-username/your-image-name:latest .
         docker push your-dockerhub-username/your-image-name:latest
