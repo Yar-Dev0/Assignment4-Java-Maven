@@ -1,4 +1,4 @@
-name: Java CI/CD
+name: Java Maven CI/CD
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout Code
       uses: actions/checkout@v2
 
     - name: Set up JDK
@@ -20,11 +20,17 @@ jobs:
         java-version: '11'
 
     - name: Build with Maven
-      run: mvn -B clean install
+      run: mvn -B clean package --file pom.xml
 
-    - name: Deploy to Docker Hub
-      if: success()
+    - name: Docker Login
       run: |
-        echo ${{ dckr_pat_Rvm0_3H37J0lqswNJ8I7PH20iUo }} | docker login -u ${{ ahmedyaar }} --password-stdin
-        docker build -t your-dockerhub-username/your-image-name:latest .
-        docker push your-dockerhub-username/your-image-name:latest
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build Docker Image
+      run: |
+        docker build -t ahmedyaar/assignment4-java:latest .
+
+
+    - name: Push Docker Image to Docker Hub
+      run: |
+        docker push ahmedyaar/assignment4-java:latest
